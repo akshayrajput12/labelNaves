@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBag, Menu } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Header() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+    document.body.style.overflow = !isOpen ? 'hidden' : 'unset';
+  };
+
   return (
     <motion.header 
       initial={{ y: -100 }}
@@ -30,10 +37,20 @@ export default function Header() {
                 0
               </span>
             </Link>
-            <button className="md:hidden">
-              <Menu className="w-6 h-6 text-gray-700" />
-            </button>
+            <div className="md:hidden flex items-center">
+              <button onClick={toggleMenu} className="text-gray-700 hover:text-[#8C2C2C]">
+                <Menu size={24} />
+              </button>
+            </div>
           </div>
+        </div>
+      </div>
+      <div className={`nav-overlay ${isOpen ? 'show' : ''}`} onClick={toggleMenu}>
+        <div className="nav-links" onClick={(e) => e.stopPropagation()}>
+          <Link to="/" className="nav-link" onClick={toggleMenu}>Home</Link>
+          <Link to="/collections" className="nav-link" onClick={toggleMenu}>Collections</Link>
+          <Link to="/about" className="nav-link" onClick={toggleMenu}>About</Link>
+          <Link to="/contact" className="nav-link" onClick={toggleMenu}>Contact</Link>
         </div>
       </div>
     </motion.header>
